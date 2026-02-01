@@ -1,0 +1,27 @@
+<!-- Placeholder screenshot images -->
+<!-- These are SVG placeholders that can be replaced with actual screenshots -->
+
+<!-- ASCII Report Screenshot -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#0f172a"/>
+  <rect x="20" y="20" width="760" height="560" rx="8" fill="#1e293b"/>
+  <circle cx="40" cy="40" r="6" fill="#ef4444"/>
+  <circle cx="60" cy="40" r="6" fill="#f59e0b"/>
+  <circle cx="80" cy="40" r="6" fill="#10b981"/>
+  <text x="400" y="40" font-family="monospace" font-size="14" fill="#94a3b8" text-anchor="middle">NexDex Terminal Output</text>
+  
+  <text x="40" y="100" font-family="monospace" font-size="14" fill="#10b981">╔════════════════════════════════════════╗</text>
+  <text x="40" y="120" font-family="monospace" font-size="14" fill="#10b981">║   IMPACT ANALYSIS REPORT               ║</text>
+  <text x="40" y="140" font-family="monospace" font-size="14" fill="#10b981">╚════════════════════════════════════════╝</text>
+  
+  <text x="40" y="180" font-family="monospace" font-size="14" fill="#f59e0b">⚠ Failed Service: Database</text>
+  <text x="40" y="200" font-family="monospace" font-size="14" fill="#ef4444">📊 Total Impact Score: 95/100</text>
+  
+  <text x="40" y="240" font-family="monospace" font-size="14" fill="#06b6d4">Affected Services:</text>
+  <text x="40" y="260" font-family="monospace" font-size="14" fill="#e2e8f0">  └─ WebApp (Critical)</text>
+  <text x="40" y="280" font-family="monospace" font-size="14" fill="#e2e8f0">     ├─ API Gateway (Critical)</text>
+  <text x="40" y="300" font-family="monospace" font-size="14" fill="#e2e8f0">     └─ Cache (Degraded)</text>
+  
+  <text x="40" y="340" font-family="monospace" font-size="14" fill="#10b981">✓ Report saved to reports/</text>
+  <text x="40" y="360" font-family="monospace" font-size="14" fill="#06b6d4">$ _</text>
+</svg>

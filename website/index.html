@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="NexDex - Map your system failures. Predict business impact. Powerful dependency mapping and failure simulation tool.">
+    <title>NexDex - Cross-System Business Impact Simulator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                    <path d="M2 12l10 5 10-5"/>
+                </svg>
+                <span class="brand-name">NexDex</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#download">Download</a></li>
+                <li><a href="#enterprise">Enterprise</a></li>
+                <li><a href="#documentation">Docs</a></li>
+                <li><a href="https://github.com/Arths17/NexDex" target="_blank" class="btn-github">GitHub</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="badge">Open Source</div>
+                    <h1 class="hero-title">
+                        Map your system failures.<br>
+                        <span class="gradient-text">Predict business impact.</span>
+                    </h1>
+                    <p class="hero-description">
+                        NexDex is a powerful dependency mapping and failure simulation tool that helps you understand the cascading effects of service outages on your business processes.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#download" class="btn btn-primary">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                            </svg>
+                            Download Free Version
+                        </a>
+                        <a href="#enterprise" class="btn btn-secondary">
+                            Explore Enterprise
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <span class="stat-number">CLI + GUI</span>
+                            <span class="stat-label">Dual Interface</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">ASCII + HTML</span>
+                            <span class="stat-label">Report Formats</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">Real-time</span>
+                            <span class="stat-label">Impact Analysis</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="terminal-window">
+                        <div class="terminal-header">
+                            <div class="terminal-buttons">
+                                <span class="btn-close"></span>
+                                <span class="btn-minimize"></span>
+                                <span class="btn-maximize"></span>
+                            </div>
+                            <span class="terminal-title">nexdex.py</span>
+                        </div>
+                        <div class="terminal-body">
+                            <pre><code><span class="prompt">$</span> python3 nexdex.py --scenario cache_outage
+
+<span class="text-success">╔════════════════════════════════════════╗
+║   IMPACT ANALYSIS REPORT               ║
+╚════════════════════════════════════════╝</span>
+
+<span class="text-warning">⚠ Failed Service: Cache</span>
+<span class="text-danger">📊 Total Impact Score: 85/100</span>
+
+<span class="text-info">Affected Services:</span>
+  └─ WebApp <span class="text-danger">(Critical)</span>
+     ├─ Database
+     └─ API Gateway <span class="text-warning">(Degraded)</span>
+
+<span class="text-success">✓ Report saved to reports/</span></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Powerful Features for<br><span class="gradient-text">Impact Analysis</span></h2>
+                <p>Everything you need to understand and simulate system failures</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"/>
+                            <rect x="14" y="3" width="7" height="7"/>
+                            <rect x="14" y="14" width="7" height="7"/>
+                            <rect x="3" y="14" width="7" height="7"/>
+                        </svg>
+                    </div>
+                    <h3>Dependency Mapping</h3>
+                    <p>Visualize complex service dependencies and understand how systems interconnect across your infrastructure.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                        </svg>
+                    </div>
+                    <h3>Failure Simulation</h3>
+                    <p>Run what-if scenarios to predict cascading failures and their business impact before they happen.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 3v18h18"/>
+                            <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
+                        </svg>
+                    </div>
+                    <h3>ASCII Graphs</h3>
+                    <p>Beautiful CLI graphs and dependency trees rendered directly in your terminal for quick analysis.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                            <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+                        </svg>
+                    </div>
+                    <h3>HTML Reports</h3>
+                    <p>Generate comprehensive HTML reports with interactive visualizations for stakeholder presentations.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                        </svg>
+                    </div>
+                    <h3>Business Impact Scoring</h3>
+                    <p>Quantify the business impact of outages with customizable scoring based on your processes.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    </div>
+                    <h3>Interactive Mode</h3>
+                    <p>Step-by-step guided interface for users who prefer a conversational approach to impact analysis.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                        </svg>
+                    </div>
+                    <h3>Scenario Tags</h3>
+                    <p>Organize and categorize failure scenarios with tags for easy management and batch analysis.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                    </div>
+                    <h3>100% Local</h3>
+                    <p>All processing happens locally. No cloud dependencies, no data leakage - complete privacy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="download">
+        <div class="container">
+            <div class="section-header">
+                <h2>Get Started with <span class="gradient-text">NexDex</span></h2>
+                <p>Free and open source - start analyzing in minutes</p>
+            </div>
+            <div class="download-grid">
+                <div class="download-card free">
+                    <div class="download-badge">Free Version</div>
+                    <h3>NexDex Community</h3>
+                    <div class="download-price">
+                        <span class="price-amount">$0</span>
+                        <span class="price-period">forever</span>
+                    </div>
+                    <ul class="download-features">
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            Unlimited service definitions
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            CLI + Interactive mode
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            ASCII graphs
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            HTML report generation
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            Scenario tagging
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            JSON configuration
+                        </li>
+                    </ul>
+                    <a href="releases/NexDex-free.zip" class="btn btn-outline" download>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                        </svg>
+                        Download ZIP
+                    </a>
+                </div>
+                <div class="download-card enterprise">
+                    <div class="download-badge enterprise-badge">Enterprise</div>
+                    <h3>NexDex Enterprise</h3>
+                    <div class="download-price">
+                        <span class="price-amount">Custom</span>
+                        <span class="price-period">pricing</span>
+                    </div>
+                    <ul class="download-features">
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            Everything in Free +
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            Custom web dashboards
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            Multi-user collaboration
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            Advanced simulation engine
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            Real-time monitoring integration
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                            Priority support & training
+                        </li>
+                    </ul>
+                    <a href="mailto:enterprise@nexdex.io?subject=Enterprise%20Inquiry" class="btn btn-primary">
+                        Contact Sales
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Installation Instructions -->
+            <div class="install-instructions">
+                <h3>Quick Install (macOS / Linux)</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Terminal</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code># Clone the repository
+git clone https://github.com/Arths17/NexDex.git
+
+# Navigate to directory
+cd NexDex
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run NexDex
+python3 nexdex.py --help</code></pre>
+                </div>
+                <div class="install-requirements">
+                    <p><strong>Requirements:</strong> Python 3.10+ • pip • Git</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enterprise Section -->
+    <section id="enterprise" class="enterprise">
+        <div class="container">
+            <div class="enterprise-content">
+                <div class="enterprise-text">
+                    <div class="enterprise-badge">Enterprise Edition</div>
+                    <h2>Scale Your Impact Analysis Across Teams</h2>
+                    <p class="enterprise-intro">
+                        NexDex Enterprise brings advanced collaboration features, custom dashboards, and dedicated support to organizations that need enterprise-grade reliability and scalability.
+                    </p>
+                    <div class="enterprise-features">
+                        <div class="enterprise-feature">
+                            <div class="feature-icon-small">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="3" width="20" height="14" rx="2"/>
+                                    <path d="M8 21h8M12 17v4"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4>Custom Web Dashboards</h4>
+                                <p>Interactive, real-time dashboards tailored to your organization's workflows and KPIs.</p>
+                            </div>
+                        </div>
+                        <div class="enterprise-feature">
+                            <div class="feature-icon-small">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4>Multi-User Collaboration</h4>
+                                <p>Share scenarios, reports, and configurations across teams with role-based access control.</p>
+                            </div>
+                        </div>
+                        <div class="enterprise-feature">
+                            <div class="feature-icon-small">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M12 6v6l4 2"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4>Real-Time Monitoring Integration</h4>
+                                <p>Connect with your existing monitoring tools (Datadog, New Relic, Prometheus) for live impact assessment.</p>
+                            </div>
+                        </div>
+                        <div class="enterprise-feature">
+                            <div class="feature-icon-small">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+                                    <path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4>Advanced Simulation Engine</h4>
+                                <p>Monte Carlo simulations, time-based failure modeling, and probabilistic impact scoring.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="enterprise-cta">
+                        <a href="mailto:enterprise@nexdex.io?subject=Enterprise%20Demo%20Request" class="btn btn-primary btn-large">
+                            Schedule a Demo
+                        </a>
+                        <p class="cta-note">Get a personalized walkthrough with our team</p>
+                    </div>
+                </div>
+                <div class="enterprise-visual">
+                    <div class="comparison-card">
+                        <div class="comparison-header">Free vs Enterprise</div>
+                        <div class="comparison-item">
+                            <span class="comparison-feature">CLI Interface</span>
+                            <span class="comparison-check free">✓</span>
+                            <span class="comparison-check enterprise">✓</span>
+                        </div>
+                        <div class="comparison-item">
+                            <span class="comparison-feature">HTML Reports</span>
+                            <span class="comparison-check free">✓</span>
+                            <span class="comparison-check enterprise">✓</span>
+                        </div>
+                        <div class="comparison-item">
+                            <span class="comparison-feature">Scenario Tagging</span>
+                            <span class="comparison-check free">✓</span>
+                            <span class="comparison-check enterprise">✓</span>
+                        </div>
+                        <div class="comparison-divider"></div>
+                        <div class="comparison-item">
+                            <span class="comparison-feature">Web Dashboard</span>
+                            <span class="comparison-cross free">✗</span>
+                            <span class="comparison-check enterprise">✓</span>
+                        </div>
+                        <div class="comparison-item">
+                            <span class="comparison-feature">Multi-User</span>
+                            <span class="comparison-cross free">✗</span>
+                            <span class="comparison-check enterprise">✓</span>
+                        </div>
+                        <div class="comparison-item">
+                            <span class="comparison-feature">Live Monitoring</span>
+                            <span class="comparison-cross free">✗</span>
+                            <span class="comparison-check enterprise">✓</span>
+                        </div>
+                        <div class="comparison-item">
+                            <span class="comparison-feature">Priority Support</span>
+                            <span class="comparison-cross free">✗</span>
+                            <span class="comparison-check enterprise">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Documentation Section -->
+    <section id="documentation" class="documentation">
+        <div class="container">
+            <div class="section-header">
+                <h2>Documentation & <span class="gradient-text">Examples</span></h2>
+                <p>Learn how to use NexDex with real-world examples</p>
+            </div>
+            <div class="docs-grid">
+                <div class="docs-card">
+                    <div class="docs-icon">📖</div>
+                    <h3>Getting Started</h3>
+                    <p>Learn the basics of defining services, creating scenarios, and running your first simulation.</p>
+                    <a href="../README.md" class="docs-link" target="_blank">
+                        Read Guide
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+                <div class="docs-card">
+                    <div class="docs-icon">⚙️</div>
+                    <h3>Configuration</h3>
+                    <p>Deep dive into services.json structure, dependency mapping, and business process scoring.</p>
+                    <a href="../README.md" class="docs-link" target="_blank">
+                        View Docs
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+                <div class="docs-card">
+                    <div class="docs-icon">🎯</div>
+                    <h3>Example Scenarios</h3>
+                    <p>Explore pre-built scenarios: database outages, cache failures, API gateway issues, and more.</p>
+                    <a href="../scenarios/" class="docs-link" target="_blank">
+                        Browse Examples
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Example Report Gallery -->
+            <div class="gallery">
+                <h3>Sample Reports</h3>
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <div class="gallery-placeholder">
+                            <div class="placeholder-icon">📊</div>
+                            <div class="placeholder-text">
+                                <strong>ASCII Report</strong>
+                                <span>Terminal-based impact analysis</span>
+                            </div>
+                        </div>
+                        <p class="gallery-caption">CLI output with dependency tree</p>
+                    </div>
+                    <div class="gallery-item">
+                        <div class="gallery-placeholder html-placeholder">
+                            <div class="placeholder-icon">📈</div>
+                            <div class="placeholder-text">
+                                <strong>HTML Report</strong>
+                                <span>Interactive visual dashboard</span>
+                            </div>
+                        </div>
+                        <p class="gallery-caption">HTML report with graphs & metrics</p>
+                    </div>
+                    <div class="gallery-item">
+                        <div class="gallery-placeholder">
+                            <div class="placeholder-icon">🔗</div>
+                            <div class="placeholder-text">
+                                <strong>Dependency Graph</strong>
+                                <span>Service relationship visualization</span>
+                            </div>
+                        </div>
+                        <p class="gallery-caption">Service dependency mapping</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="brand-logo">
+                        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5"/>
+                            <path d="M2 12l10 5 10-5"/>
+                        </svg>
+                        <span class="brand-name">NexDex</span>
+                    </div>
+                    <p class="footer-tagline">Map your system failures.<br>Predict business impact.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <ul>
+                            <li><a href="#features">Features</a></li>
+                            <li><a href="#download">Download</a></li>
+                            <li><a href="#enterprise">Enterprise</a></li>
+                            <li><a href="#documentation">Documentation</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="https://github.com/Arths17/NexDex">GitHub Repository</a></li>
+                            <li><a href="https://github.com/Arths17/NexDex/issues">Report Issues</a></li>
+                            <li><a href="https://github.com/Arths17/NexDex/blob/main/LICENSE">License (MIT)</a></li>
+                            <li><a href="https://github.com/Arths17/NexDex/releases">Changelog</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="https://github.com/Arths17/NexDex/discussions">Discussions</a></li>
+                            <li><a href="https://github.com/Arths17/NexDex/wiki">Wiki</a></li>
+                            <li><a href="mailto:support@nexdex.io">Support</a></li>
+                            <li><a href="mailto:enterprise@nexdex.io">Contact Sales</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 NexDex. Released under the MIT License.</p>
+                <p class="footer-note">Built with ❤️ for DevOps and SRE teams</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Simple Mobile Menu Toggle Script -->
+    <script>
+        // Mobile menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+        
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+        
+        // Copy code function
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-block').querySelector('code');
+            const text = codeBlock.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                }, 2000);
+            });
+        }
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#' && href.length > 1) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

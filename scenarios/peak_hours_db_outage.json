@@ -1,0 +1,10 @@
+{
+  "name": "peak_hours_db_outage",
+  "description": "Database outage during peak hours (affects orders, payments, and customer experience)",
+  "failed_services": [
+    "Database"
+  ],
+  "created_at": "2026-02-01T13:45:00",
+  "tags": ["peak-hours", "database", "critical", "revenue-impact"],
+  "peak_hours": true
+}

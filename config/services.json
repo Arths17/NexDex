@@ -1,0 +1,114 @@
+{
+  "business_processes": {
+    "Core Data Platform": 10,
+    "Performance & Sessions": 7,
+    "User Authentication": 8,
+    "API Management": 9,
+    "Payment Processing": 10,
+    "Inventory Management": 7,
+    "Order Management": 9,
+    "Customer Notifications": 6,
+    "Customer Experience": 9,
+    "Mobile Customer Interface": 8,
+    "Business Analytics": 5,
+    "Product Search": 6
+  },
+  "services": [
+    {
+      "name": "Database",
+      "depends_on": [],
+      "business_process": "Core Data Platform",
+      "importance": 10,
+      "mttr": 20,
+      "description": "Primary relational database for critical transactional data"
+    },
+    {
+      "name": "Cache",
+      "depends_on": [],
+      "business_process": "Performance & Sessions",
+      "importance": 7,
+      "mttr": 8,
+      "description": "In-memory cache and session store"
+    },
+    {
+      "name": "AuthService",
+      "depends_on": ["Database", "Cache"],
+      "business_process": "User Authentication",
+      "importance": 8,
+      "mttr": 10,
+      "description": "Authentication and authorization service"
+    },
+    {
+      "name": "API_Gateway",
+      "depends_on": ["AuthService", "Cache"],
+      "business_process": "API Management",
+      "importance": 9,
+      "mttr": 12,
+      "description": "API Gateway routing external requests"
+    },
+    {
+      "name": "PaymentService",
+      "depends_on": ["Database", "API_Gateway"],
+      "business_process": "Payment Processing",
+      "importance": 10,
+      "mttr": 25,
+      "description": "Payment processing and transaction management"
+    },
+    {
+      "name": "InventoryService",
+      "depends_on": ["Database", "API_Gateway"],
+      "business_process": "Inventory Management",
+      "importance": 7,
+      "mttr": 15,
+      "description": "Product inventory tracking and availability"
+    },
+    {
+      "name": "OrderService",
+      "depends_on": ["PaymentService", "InventoryService"],
+      "business_process": "Order Management",
+      "importance": 9,
+      "mttr": 18,
+      "description": "Order creation, validation, and fulfillment"
+    },
+    {
+      "name": "NotificationService",
+      "depends_on": ["API_Gateway", "Cache"],
+      "business_process": "Customer Notifications",
+      "importance": 6,
+      "mttr": 8,
+      "description": "Email, SMS, and push notifications"
+    },
+    {
+      "name": "WebApp",
+      "depends_on": ["API_Gateway"],
+      "business_process": "Customer Experience",
+      "importance": 9,
+      "mttr": 15,
+      "description": "Customer-facing web application"
+    },
+    {
+      "name": "MobileApp",
+      "depends_on": ["API_Gateway"],
+      "business_process": "Mobile Customer Interface",
+      "importance": 8,
+      "mttr": 25,
+      "description": "Customer-facing mobile application"
+    },
+    {
+      "name": "AnalyticsService",
+      "depends_on": ["Database"],
+      "business_process": "Business Analytics",
+      "importance": 5,
+      "mttr": 30,
+      "description": "Analytics and reporting"
+    },
+    {
+      "name": "SearchService",
+      "depends_on": ["Database", "Cache"],
+      "business_process": "Product Search",
+      "importance": 6,
+      "mttr": 10,
+      "description": "Product search and recommendation engine"
+    }
+  ]
+}

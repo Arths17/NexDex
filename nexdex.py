@@ -848,7 +848,8 @@ Examples:
                 scenario.failed_services,
                 generate_reports=not args.no_reports,
                 show_ascii_graph=args.ascii_graph,
-                open_report=args.open_report
+                open_report=args.open_report,
+                peak_hours=scenario.peak_hours
             )
         except FileNotFoundError as e:
             print_colored(f"❌ {e}", Fore.RED)

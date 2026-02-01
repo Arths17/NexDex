@@ -83,6 +83,22 @@
             color: #999;
             margin: 1rem 0;
         }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #28a745;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .status-badge.coming-soon {
+            background: #ffc107;
+            color: #333;
+        }
 
         .download-btn {
             display: inline-block;
@@ -97,6 +113,13 @@
             transition: all 0.3s ease;
             cursor: pointer;
             border: none;
+        }
+        
+        .download-btn:disabled,
+        .download-btn.coming-soon {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.6;
         }
 
         .download-btn:hover {
@@ -362,7 +385,7 @@
                     <p class="system-info">Intel & Apple Silicon</p>
                     <p class="system-info">macOS 10.13+</p>
                     <p class="size">~150 MB</p>
-                    <a href="releases/NexDex-Mac.zip" download class="download-btn">
+                    <a href="https://github.com/Arths17/NexDex/releases/download/v1.0.0/NexDex-Mac.zip" class="download-btn">
                         Download for Mac
                     </a>
                     <div class="instructions">
@@ -382,7 +405,7 @@
                     <p class="system-info">Windows 10 & 11</p>
                     <p class="system-info">64-bit recommended</p>
                     <p class="size">~150 MB</p>
-                    <a href="releases/NexDex-Windows.zip" download class="download-btn">
+                    <a href="https://github.com/Arths17/NexDex/releases/download/v1.0.0/NexDex-Windows.zip" class="download-btn">
                         Download for Windows
                     </a>
                     <div class="instructions">
@@ -402,7 +425,7 @@
                     <p class="system-info">glibc 2.17+</p>
                     <p class="system-info">Ubuntu 16.04+, CentOS 7+</p>
                     <p class="size">~100 MB</p>
-                    <a href="releases/NexDex-Linux.tar.gz" download class="download-btn">
+                    <a href="https://github.com/Arths17/NexDex/releases/download/v1.0.0/NexDex-Linux.tar.gz" class="download-btn">
                         Download for Linux
                     </a>
                     <div class="instructions">

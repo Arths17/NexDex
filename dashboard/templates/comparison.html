@@ -1,0 +1,389 @@
+{% extends "base.html" %}
+
+{% block title %}Compare Scenarios - NexDex Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="hero">
+        <h1>⚖️ Compare Scenarios</h1>
+        <p>Analyze the impact difference between two failure scenarios</p>
+    </div>
+
+    <!-- Scenario Selection -->
+    <div class="comparison-setup">
+        <div class="scenario-selector">
+            <label>Scenario 1</label>
+            <select id="scenario1-select" class="select-input">
+                <option value="">-- Select Scenario --</option>
+            </select>
+        </div>
+        
+        <div class="vs-divider">VS</div>
+        
+        <div class="scenario-selector">
+            <label>Scenario 2</label>
+            <select id="scenario2-select" class="select-input">
+                <option value="">-- Select Scenario --</option>
+            </select>
+        </div>
+        
+        <button id="compare-btn" class="btn btn-primary btn-large" disabled>
+            Compare Scenarios
+        </button>
+    </div>
+
+    <!-- Comparison Results -->
+    <div id="comparison-results" class="comparison-results hidden">
+        <div class="comparison-header">
+            <h2 id="comparison-title"></h2>
+            <div id="comparison-verdict" class="comparison-verdict"></div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="comparison-summary">
+            <div class="comparison-metric">
+                <div class="metric-label">Impact Score Difference</div>
+                <div id="metric-impact" class="metric-value"></div>
+            </div>
+            <div class="comparison-metric">
+                <div class="metric-label">Services Affected</div>
+                <div id="metric-services" class="metric-value"></div>
+            </div>
+            <div class="comparison-metric">
+                <div class="metric-label">Cascade Failures</div>
+                <div id="metric-cascades" class="metric-value"></div>
+            </div>
+            <div class="comparison-metric">
+                <div class="metric-label">Processes Affected</div>
+                <div id="metric-processes" class="metric-value"></div>
+            </div>
+        </div>
+
+        <!-- Side-by-side Comparison Table -->
+        <div class="comparison-table-container">
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th id="scenario1-header" class="scenario-col"></th>
+                        <th id="scenario2-header" class="scenario-col"></th>
+                        <th class="diff-col">Difference</th>
+                    </tr>
+                </thead>
+                <tbody id="comparison-table-body">
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Unique Services -->
+        <div id="unique-services-section" class="unique-services-section hidden">
+            <h3>🔍 Unique Services Affected</h3>
+            <div class="unique-services-grid">
+                <div class="unique-services-column">
+                    <h4 id="unique1-title"></h4>
+                    <ul id="unique1-list" class="services-list"></ul>
+                </div>
+                <div class="unique-services-column">
+                    <h4 id="unique2-title"></h4>
+                    <ul id="unique2-list" class="services-list"></ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Impact Comparison -->
+        <div class="impact-comparison-grid">
+            <div id="scenario1-impacts" class="scenario-impacts-column">
+                <h3>📊 <span id="scenario1-impacts-title"></span> - Top Impacts</h3>
+                <div id="scenario1-impacts-list" class="impacts-list"></div>
+            </div>
+            <div id="scenario2-impacts" class="scenario-impacts-column">
+                <h3>📊 <span id="scenario2-impacts-title"></span> - Top Impacts</h3>
+                <div id="scenario2-impacts-list" class="impacts-list"></div>
+            </div>
+        </div>
+
+        <!-- Export Options -->
+        <div class="export-section">
+            <button id="export-csv-btn" class="btn btn-secondary">📥 Export as CSV</button>
+            <button id="export-json-btn" class="btn btn-secondary">📥 Export as JSON</button>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="empty-state hidden">
+        <div class="empty-icon">📭</div>
+        <p>Select two scenarios to start comparing</p>
+    </div>
+</div>
+
+<!-- Comparison Error Modal -->
+<div id="error-modal" class="modal">
+    <div class="modal-content">
+        <span class="modal-close">&times;</span>
+        <h2>⚠️ Error</h2>
+        <p id="error-message"></p>
+        <div class="modal-footer">
+            <button class="btn btn-primary" id="error-close-btn">Close</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadScenariosForComparison();
+    setupComparisonUI();
+});
+
+async function loadScenariosForComparison() {
+    try {
+        const response = await fetch('/api/scenarios');
+        const data = await response.json();
+        
+        if (!data.success) return;
+        
+        const scenarios = data.scenarios.map(s => s.name);
+        const select1 = document.getElementById('scenario1-select');
+        const select2 = document.getElementById('scenario2-select');
+        
+        scenarios.forEach(name => {
+            const option1 = document.createElement('option');
+            option1.value = name;
+            option1.textContent = name;
+            select1.appendChild(option1);
+            
+            const option2 = document.createElement('option');
+            option2.value = name;
+            option2.textContent = name;
+            select2.appendChild(option2);
+        });
+    } catch (error) {
+        console.error('Error loading scenarios:', error);
+    }
+}
+
+function setupComparisonUI() {
+    const select1 = document.getElementById('scenario1-select');
+    const select2 = document.getElementById('scenario2-select');
+    const compareBtn = document.getElementById('compare-btn');
+    
+    [select1, select2].forEach(select => {
+        select.addEventListener('change', () => {
+            compareBtn.disabled = !select1.value || !select2.value;
+        });
+    });
+    
+    compareBtn.addEventListener('click', compareScenarios);
+    
+    // Modal close
+    document.querySelectorAll('.modal-close').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.target.closest('.modal').classList.remove('active');
+        });
+    });
+    
+    document.getElementById('error-close-btn').addEventListener('click', () => {
+        document.getElementById('error-modal').classList.remove('active');
+    });
+    
+    // Export buttons
+    document.getElementById('export-csv-btn').addEventListener('click', exportComparison('csv'));
+    document.getElementById('export-json-btn').addEventListener('click', exportComparison('json'));
+}
+
+async function compareScenarios() {
+    const scenario1 = document.getElementById('scenario1-select').value;
+    const scenario2 = document.getElementById('scenario2-select').value;
+    
+    if (!scenario1 || !scenario2) {
+        showError('Please select both scenarios');
+        return;
+    }
+    
+    if (scenario1 === scenario2) {
+        showError('Please select two different scenarios');
+        return;
+    }
+    
+    showSpinner(true);
+    
+    try {
+        const response = await fetch('/api/compare', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ scenario1_name: scenario1, scenario2_name: scenario2 })
+        });
+        
+        const data = await response.json();
+        
+        if (!data.success) {
+            showError(data.error);
+            return;
+        }
+        
+        displayComparisonResults(data);
+    } catch (error) {
+        console.error('Error comparing scenarios:', error);
+        showError('Error comparing scenarios');
+    } finally {
+        showSpinner(false);
+    }
+}
+
+function displayComparisonResults(data) {
+    const results = document.getElementById('comparison-results');
+    const comparison = data.comparison;
+    const s1 = data.scenario1;
+    const s2 = data.scenario2;
+    
+    // Update header
+    document.getElementById('comparison-title').textContent = 
+        `${s1.name} vs ${s2.name}`;
+    
+    const worseLabel = comparison.worse_scenario;
+    const verdictColor = comparison.impact_pct_diff > 0 ? 'danger' : 'success';
+    document.getElementById('comparison-verdict').innerHTML = 
+        `<span class="verdict verdict-${verdictColor}">
+            ${worseLabel} is MORE SEVERE
+            <br><small>${Math.abs(comparison.impact_pct_diff)}% impact difference</small>
+        </span>`;
+    
+    // Update metrics
+    const impactDiff = comparison.impact_diff;
+    const impactPct = comparison.impact_pct_diff;
+    document.getElementById('metric-impact').innerHTML = 
+        `<span class="${impactDiff < 0 ? 'text-success' : 'text-danger'}">${Math.abs(impactDiff).toFixed(2)} (${Math.abs(impactPct).toFixed(1)}%)</span>`;
+    
+    document.getElementById('metric-services').innerHTML = 
+        `<span class="${comparison.services_diff < 0 ? 'text-success' : 'text-danger'}">${Math.abs(comparison.services_diff)} ${comparison.services_diff < 0 ? '↓' : '↑'}</span>`;
+    
+    // Table
+    document.getElementById('scenario1-header').textContent = s1.name;
+    document.getElementById('scenario2-header').textContent = s2.name;
+    
+    const tbody = document.getElementById('comparison-table-body');
+    tbody.innerHTML = `
+        <tr>
+            <td><strong>Total Impact Score</strong></td>
+            <td>${s1.summary.total_impact_score.toFixed(2)}</td>
+            <td>${s2.summary.total_impact_score.toFixed(2)}</td>
+            <td class="diff-cell ${impactDiff < 0 ? 'text-success' : 'text-danger'}">
+                ${impactDiff > 0 ? '+' : ''}${impactDiff.toFixed(2)}
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Services Affected</strong></td>
+            <td>${s1.summary.total_services_affected}</td>
+            <td>${s2.summary.total_services_affected}</td>
+            <td class="diff-cell">${comparison.services_diff > 0 ? '+' : ''}${comparison.services_diff}</td>
+        </tr>
+        <tr>
+            <td><strong>Cascade Failures</strong></td>
+            <td>${s1.summary.cascade_failures}</td>
+            <td>${s2.summary.cascade_failures}</td>
+            <td class="diff-cell">${s2.summary.cascade_failures - s1.summary.cascade_failures > 0 ? '+' : ''}${s2.summary.cascade_failures - s1.summary.cascade_failures}</td>
+        </tr>
+        <tr>
+            <td><strong>Processes Affected</strong></td>
+            <td>${s1.summary.business_processes_affected}</td>
+            <td>${s2.summary.business_processes_affected}</td>
+            <td class="diff-cell">${s2.summary.business_processes_affected - s1.summary.business_processes_affected > 0 ? '+' : ''}${s2.summary.business_processes_affected - s1.summary.business_processes_affected}</td>
+        </tr>
+    `;
+    
+    // Unique services
+    if (comparison.unique_to_first.length > 0 || comparison.unique_to_second.length > 0) {
+        document.getElementById('unique-services-section').classList.remove('hidden');
+        document.getElementById('unique1-title').textContent = `Only in ${s1.name}:`;
+        document.getElementById('unique1-list').innerHTML = 
+            comparison.unique_to_first.map(s => `<li>${escapeHtml(s)}</li>`).join('');
+        
+        document.getElementById('unique2-title').textContent = `Only in ${s2.name}:`;
+        document.getElementById('unique2-list').innerHTML = 
+            comparison.unique_to_second.map(s => `<li>${escapeHtml(s)}</li>`).join('');
+    } else {
+        document.getElementById('unique-services-section').classList.add('hidden');
+    }
+    
+    // Impacts
+    document.getElementById('scenario1-impacts-title').textContent = s1.name;
+    document.getElementById('scenario1-impacts-list').innerHTML = 
+        s1.impacts.slice(0, 5).map(i => `
+            <div class="impact-item">
+                <strong>${escapeHtml(i.service)}</strong>
+                <span class="impact-score">${i.impact_score.toFixed(2)}</span>
+                <small>${i.failure_type}</small>
+            </div>
+        `).join('');
+    
+    document.getElementById('scenario2-impacts-title').textContent = s2.name;
+    document.getElementById('scenario2-impacts-list').innerHTML = 
+        s2.impacts.slice(0, 5).map(i => `
+            <div class="impact-item">
+                <strong>${escapeHtml(i.service)}</strong>
+                <span class="impact-score">${i.impact_score.toFixed(2)}</span>
+                <small>${i.failure_type}</small>
+            </div>
+        `).join('');
+    
+    document.getElementById('empty-state').classList.add('hidden');
+    results.classList.remove('hidden');
+    
+    // Store comparison data for export
+    window.lastComparisonData = { scenario1: s1, scenario2: s2, comparison };
+}
+
+function exportComparison(format) {
+    return () => {
+        if (!window.lastComparisonData) return;
+        
+        const data = window.lastComparisonData;
+        const s1 = data.scenario1;
+        const s2 = data.scenario2;
+        
+        let content, filename, type;
+        
+        if (format === 'csv') {
+            const rows = [
+                ['Comparison Report', `${s1.name} vs ${s2.name}`],
+                [],
+                ['Metric', s1.name, s2.name, 'Difference'],
+                ['Total Impact Score', s1.summary.total_impact_score, s2.summary.total_impact_score, 
+                 (s2.summary.total_impact_score - s1.summary.total_impact_score).toFixed(2)],
+                ['Services Affected', s1.summary.total_services_affected, s2.summary.total_services_affected, ''],
+                ['Cascade Failures', s1.summary.cascade_failures, s2.summary.cascade_failures, ''],
+            ];
+            
+            content = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
+            filename = `comparison-${s1.name}-vs-${s2.name}.csv`;
+            type = 'text/csv';
+        } else {
+            content = JSON.stringify(data, null, 2);
+            filename = `comparison-${s1.name}-vs-${s2.name}.json`;
+            type = 'application/json';
+        }
+        
+        const blob = new Blob([content], { type });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    };
+}
+
+function showError(message) {
+    document.getElementById('error-message').textContent = message;
+    document.getElementById('error-modal').classList.add('active');
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+</script>
+{% endblock %}

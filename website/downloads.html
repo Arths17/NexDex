@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download NexDex - Cross-System Business Impact Simulator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .downloads-section {
+            margin: 3rem 0;
+        }
+
+        .downloads-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .download-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .download-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .download-card h3 {
+            font-size: 1.8rem;
+            margin: 0.5rem 0;
+            color: #667eea;
+        }
+
+        .download-card .system-info {
+            font-size: 0.95rem;
+            color: #666;
+            margin: 0.5rem 0;
+        }
+
+        .download-card .size {
+            font-size: 0.85rem;
+            color: #999;
+            margin: 1rem 0;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 1.5rem 0 1rem;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .download-btn:active {
+            transform: scale(0.98);
+        }
+
+        .instructions {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.8;
+            margin-top: 1rem;
+            text-align: left;
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+
+        .instructions ol {
+            margin-left: 1.5rem;
+        }
+
+        .features-section {
+            background: #f8f9fa;
+            padding: 3rem 2rem;
+            border-radius: 8px;
+            margin: 3rem 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature {
+            padding: 1.5rem;
+        }
+
+        .feature h4 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .requirements-section {
+            margin: 3rem 0;
+        }
+
+        .requirements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .requirements-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .requirements-card h4 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .requirements-card ul {
+            list-style: none;
+        }
+
+        .requirements-card li {
+            padding: 0.5rem 0;
+            color: #666;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .requirements-card li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .faq-section {
+            margin: 3rem 0;
+        }
+
+        .faq-item {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .faq-item h4 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .faq-item h4:hover {
+            color: #764ba2;
+        }
+
+        .faq-item p {
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .faq-item a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .faq-item a:hover {
+            text-decoration: underline;
+        }
+
+        .changelog {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 3rem 0;
+        }
+
+        .changelog h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .changelog ul {
+            list-style: none;
+            margin-left: 1rem;
+        }
+
+        .changelog li {
+            padding: 0.5rem 0;
+            color: #666;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .changelog li:before {
+            content: "✨";
+            position: absolute;
+            left: 0;
+        }
+
+        .footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .downloads-grid,
+            .features-grid,
+            .requirements-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .download-btn {
+                width: 100%;
+            }
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .badge.new {
+            background: #ff6b6b;
+        }
+
+        .badge.popular {
+            background: #28a745;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .alert.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .alert.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert.warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>📥 Download NexDex</h1>
+        <p>Cross-System Business Impact Simulator</p>
+        <p style="font-size: 0.95rem; margin-top: 1rem; opacity: 0.8;">Get started in 30 seconds • Zero installation required • Runs completely local</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Quick Info -->
+        <div class="alert alert-info">
+            <strong>💡 Tip:</strong> Download the app for your operating system, extract it, and double-click to launch. The dashboard opens automatically in your browser!
+        </div>
+
+        <!-- Downloads Section -->
+        <section class="downloads-section">
+            <h2 style="color: #333; margin-bottom: 1rem;">Available Downloads</h2>
+            <div class="downloads-grid">
+                <!-- macOS -->
+                <div class="download-card">
+                    <span class="badge popular">Most Popular</span>
+                    <h3>🍎 macOS</h3>
+                    <p class="system-info">Intel & Apple Silicon</p>
+                    <p class="system-info">macOS 10.13+</p>
+                    <p class="size">~150 MB</p>
+                    <a href="releases/NexDex-Mac.zip" download class="download-btn">
+                        Download for Mac
+                    </a>
+                    <div class="instructions">
+                        <strong>Installation:</strong>
+                        <ol>
+                            <li>Download the ZIP file</li>
+                            <li>Extract to get <code>NexDex.app</code></li>
+                            <li>Double-click <code>NexDex.app</code></li>
+                            <li>Dashboard opens in your browser</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Windows -->
+                <div class="download-card">
+                    <h3>🪟 Windows</h3>
+                    <p class="system-info">Windows 10 & 11</p>
+                    <p class="system-info">64-bit recommended</p>
+                    <p class="size">~150 MB</p>
+                    <a href="releases/NexDex-Windows.zip" download class="download-btn">
+                        Download for Windows
+                    </a>
+                    <div class="instructions">
+                        <strong>Installation:</strong>
+                        <ol>
+                            <li>Download the ZIP file</li>
+                            <li>Extract to get <code>NexDex.exe</code></li>
+                            <li>Double-click <code>NexDex.exe</code></li>
+                            <li>Dashboard opens in your browser</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Linux -->
+                <div class="download-card">
+                    <h3>🐧 Linux</h3>
+                    <p class="system-info">glibc 2.17+</p>
+                    <p class="system-info">Ubuntu 16.04+, CentOS 7+</p>
+                    <p class="size">~100 MB</p>
+                    <a href="releases/NexDex-Linux.tar.gz" download class="download-btn">
+                        Download for Linux
+                    </a>
+                    <div class="instructions">
+                        <strong>Installation:</strong>
+                        <ol>
+                            <li>Download the TAR.GZ file</li>
+                            <li>Extract: <code>tar -xzf NexDex-Linux.tar.gz</code></li>
+                            <li>Run: <code>./NexDex</code></li>
+                            <li>Dashboard opens in your browser</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <h2 style="color: #333;">✨ What's Included</h2>
+            <div class="features-grid">
+                <div class="feature">
+                    <h4>📊 Interactive Dashboard</h4>
+                    <p>Beautiful web interface for managing scenarios and running simulations</p>
+                </div>
+                <div class="feature">
+                    <h4>🔄 Scenario Comparison</h4>
+                    <p>Side-by-side analysis of failure scenarios with visual impact indicators</p>
+                </div>
+                <div class="feature">
+                    <h4>📈 Impact Analysis</h4>
+                    <p>Detailed reports on service failures and cascade effects</p>
+                </div>
+                <div class="feature">
+                    <h4>📄 Report Generation</h4>
+                    <p>Export HTML and Markdown reports for documentation</p>
+                </div>
+                <div class="feature">
+                    <h4>🕐 Peak Hours Modeling</h4>
+                    <p>1.2x impact multiplier for peak business hours</p>
+                </div>
+                <div class="feature">
+                    <h4>🔒 100% Local</h4>
+                    <p>No cloud, no internet, no data leaving your computer</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- System Requirements -->
+        <section class="requirements-section">
+            <h2 style="color: #333; margin-bottom: 1rem;">📋 System Requirements</h2>
+            <div class="requirements-grid">
+                <div class="requirements-card">
+                    <h4>🍎 macOS</h4>
+                    <ul>
+                        <li>macOS 10.13 or later</li>
+                        <li>Intel or Apple Silicon</li>
+                        <li>150 MB free disk space</li>
+                        <li>512 MB RAM minimum</li>
+                    </ul>
+                </div>
+                <div class="requirements-card">
+                    <h4>🪟 Windows</h4>
+                    <ul>
+                        <li>Windows 10 or 11</li>
+                        <li>64-bit recommended</li>
+                        <li>150 MB free disk space</li>
+                        <li>512 MB RAM minimum</li>
+                    </ul>
+                </div>
+                <div class="requirements-card">
+                    <h4>🐧 Linux</h4>
+                    <ul>
+                        <li>glibc 2.17+</li>
+                        <li>Ubuntu 16.04+, CentOS 7+, Debian 8+</li>
+                        <li>100 MB free disk space</li>
+                        <li>512 MB RAM minimum</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Changelog -->
+        <section class="changelog">
+            <h3>📝 Latest Release (v1.0.0) - February 1, 2026</h3>
+            <ul>
+                <li>Interactive web dashboard with scenario management</li>
+                <li>Scenario comparison with visual impact analysis</li>
+                <li>Peak hours impact multipliers (1.2x)</li>
+                <li>HTML & Markdown report generation</li>
+                <li>Service dependency visualization</li>
+                <li>Business process impact analysis</li>
+            </ul>
+            <p style="margin-top: 1rem; color: #666;">
+                <a href="CHANGELOG.md" target="_blank">View full changelog →</a>
+            </p>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <h2 style="color: #333; margin-bottom: 1rem;">❓ Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h4>❓ Do I need to install anything?</h4>
+                <p>No! Just download, extract the ZIP/TAR file, and run. No installation, no dependencies, no administrator privileges needed.</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>❓ Does NexDex require internet?</h4>
+                <p>No. NexDex runs entirely locally on your computer. All data stays on your machine. No cloud upload, no external services.</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>❓ What if I have issues starting the app?</h4>
+                <p>Check the <a href="INSTALL.md" target="_blank">Installation Guide</a> for troubleshooting. If you still have issues, <a href="https://github.com/yourrepo/nexdex/issues" target="_blank">create an issue on GitHub</a>.</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>❓ Can I see the source code?</h4>
+                <p>Yes! NexDex is open source. Visit our <a href="https://github.com/yourrepo/nexdex" target="_blank">GitHub repository</a> to explore the code.</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>❓ How is my data protected?</h4>
+                <p>Your data never leaves your computer. All simulations run locally. Reports are saved to your local disk. No telemetry or tracking.</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>❓ Can I use NexDex for commercial purposes?</h4>
+                <p>Check our <a href="LICENSE" target="_blank">license</a> for terms. Generally, yes for internal business use.</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>❓ How do I update to a newer version?</h4>
+                <p>Simply download the latest version and replace your .app/.exe file. Your scenarios and config files are preserved.</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>❓ Does it work on older machines?</h4>
+                <p>Check the system requirements above. NexDex requires macOS 10.13+, Windows 10+, or Linux with glibc 2.17+.</p>
+            </div>
+        </section>
+
+        <!-- Getting Started -->
+        <section style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 3rem 2rem; border-radius: 8px; margin: 3rem 0; text-align: center;">
+            <h2 style="color: white; margin-bottom: 1rem;">🚀 Ready to Get Started?</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.9;">Download NexDex now and simulate your first failure scenario in minutes.</p>
+            <a href="#downloads-section" class="download-btn" style="background: white; color: #667eea; font-weight: bold;">
+                ↓ Download Now
+            </a>
+        </section>
+
+        <!-- Documentation Links -->
+        <section style="text-align: center; margin: 3rem 0;">
+            <h3 style="color: #333; margin-bottom: 1rem;">📚 Documentation</h3>
+            <p>
+                <a href="INSTALL.md" style="color: #667eea; text-decoration: none; margin: 0 1rem; font-weight: 500;">Installation Guide</a> •
+                <a href="README.md" style="color: #667eea; text-decoration: none; margin: 0 1rem; font-weight: 500;">User Guide</a> •
+                <a href="https://github.com/yourrepo/nexdex" style="color: #667eea; text-decoration: none; margin: 0 1rem; font-weight: 500;">GitHub</a> •
+                <a href="LICENSE" style="color: #667eea; text-decoration: none; margin: 0 1rem; font-weight: 500;">License</a>
+            </p>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>© 2026 NexDex. Built with ❤️ for engineers who care about system reliability.</p>
+        <p style="margin-top: 1rem; font-size: 0.9rem;">
+            <a href="https://github.com/yourrepo/nexdex">GitHub</a> •
+            <a href="mailto:support@nexdex.dev">Support</a> •
+            <a href="https://nexdex.dev">Website</a>
+        </p>
+    </div>
+
+    <!-- Optional: Analytics tracking for downloads -->
+    <script>
+        document.querySelectorAll('a[download]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const platform = this.textContent.match(/Mac|Windows|Linux/)[0];
+                console.log(`Download initiated: ${platform}`);
+                // You can send this to analytics here
+                // gtag('event', 'file_download', { 'file_name': `NexDex-${platform}` });
+            });
+        });
+    </script>
+</body>
+</html>

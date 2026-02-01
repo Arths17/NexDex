@@ -1,0 +1,438 @@
+{% extends "base.html" %}
+
+{% block title %}Scenarios - NexDex Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>📊 NexDex Dashboard</h1>
+        <p>Simulate and analyze cross-system business impact scenarios</p>
+    </div>
+
+    <!-- Search & Filter Section -->
+    <div class="search-section">
+        <input 
+            type="text" 
+            id="search-input" 
+            class="search-box" 
+            placeholder="🔍 Search scenarios by name or tags..."
+        >
+        <div class="filter-chips" id="filter-chips">
+            <span class="chip active" data-filter="all">All</span>
+        </div>
+    </div>
+
+    <!-- Scenarios Grid -->
+    <div id="scenarios-container" class="scenarios-grid">
+        <div class="loading-message">Loading scenarios...</div>
+    </div>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="empty-state hidden">
+        <div class="empty-icon">📭</div>
+        <h2>No Scenarios Found</h2>
+        <p>Create scenarios using the CLI or add them to the <code>scenarios/</code> folder.</p>
+    </div>
+</div>
+
+<!-- Scenario Modal -->
+<div id="scenario-modal" class="modal">
+    <div class="modal-content modal-large">
+        <span class="modal-close">&times;</span>
+        <div class="modal-header">
+            <h2 id="modal-title">Scenario</h2>
+            <span id="modal-peak-badge" class="badge badge-peak hidden">🔴 Peak Hours</span>
+        </div>
+        <div id="modal-body" class="modal-body">
+            <!-- Content loaded dynamically -->
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="modal-close-btn">Close</button>
+            <button class="btn btn-primary" id="modal-run-btn">Run Simulation</button>
+        </div>
+    </div>
+</div>
+
+<!-- Results Modal -->
+<div id="results-modal" class="modal">
+    <div class="modal-content modal-large">
+        <span class="modal-close">&times;</span>
+        <div class="modal-header">
+            <h2>Simulation Results</h2>
+        </div>
+        <div id="results-content" class="modal-body">
+            <!-- Results loaded dynamically -->
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="results-close-btn">Close</button>
+            <button class="btn btn-primary" id="export-results-btn">Export Report</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadScenarios();
+    setupEventListeners();
+    setupModals();
+});
+
+async function loadScenarios() {
+    try {
+        const response = await fetch('/api/scenarios');
+        const data = await response.json();
+        
+        if (!data.success) {
+            showToast('Error loading scenarios', 'error');
+            return;
+        }
+        
+        const scenarios = data.scenarios;
+        const container = document.getElementById('scenarios-container');
+        const emptyState = document.getElementById('empty-state');
+        
+        if (scenarios.length === 0) {
+            container.classList.add('hidden');
+            emptyState.classList.remove('hidden');
+            return;
+        }
+        
+        container.classList.remove('hidden');
+        emptyState.classList.add('hidden');
+        
+        // Extract unique tags for filter
+        const allTags = new Set(['all']);
+        scenarios.forEach(s => s.tags.forEach(t => allTags.add(t)));
+        
+        updateFilterChips(Array.from(allTags));
+        renderScenarios(scenarios);
+    } catch (error) {
+        console.error('Error loading scenarios:', error);
+        showToast('Error loading scenarios', 'error');
+    }
+}
+
+function updateFilterChips(tags) {
+    const chipContainer = document.getElementById('filter-chips');
+    chipContainer.innerHTML = '';
+    
+    tags.forEach(tag => {
+        const chip = document.createElement('span');
+        chip.className = `chip ${tag === 'all' ? 'active' : ''}`;
+        chip.textContent = tag === 'all' ? 'All' : tag;
+        chip.dataset.filter = tag;
+        chipContainer.appendChild(chip);
+    });
+}
+
+function renderScenarios(scenarios) {
+    const container = document.getElementById('scenarios-container');
+    container.innerHTML = scenarios.map(scenario => `
+        <div class="scenario-card" data-scenario="${scenario.name}">
+            <div class="card-header">
+                <h3>${escapeHtml(scenario.name)}</h3>
+                ${scenario.peak_hours ? '<span class="badge badge-peak">🔴 Peak</span>' : ''}
+            </div>
+            <p class="card-description">${escapeHtml(scenario.description)}</p>
+            <div class="card-services">
+                <strong>Services:</strong> ${escapeHtml(scenario.failed_services.join(', '))}
+            </div>
+            ${scenario.tags.length > 0 ? `
+                <div class="card-tags">
+                    ${scenario.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
+                </div>
+            ` : ''}
+            <div class="card-footer">
+                <small>Created: ${new Date(scenario.created_at).toLocaleDateString()}</small>
+                <button class="btn btn-primary btn-sm" onclick="openScenarioModal('${scenario.name}')">
+                    View & Run →
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function setupEventListeners() {
+    // Search input
+    document.getElementById('search-input').addEventListener('input', async (e) => {
+        const search = e.target.value.toLowerCase();
+        const response = await fetch('/api/scenarios');
+        const data = await response.json();
+        const filtered = data.scenarios.filter(s => 
+            s.name.toLowerCase().includes(search) ||
+            s.description.toLowerCase().includes(search) ||
+            s.failed_services.some(sv => sv.toLowerCase().includes(search))
+        );
+        renderScenarios(filtered);
+    });
+    
+    // Filter chips
+    document.getElementById('filter-chips').addEventListener('click', async (e) => {
+        if (!e.target.classList.contains('chip')) return;
+        
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        e.target.classList.add('active');
+        
+        const filter = e.target.dataset.filter;
+        const response = await fetch('/api/scenarios');
+        const data = await response.json();
+        
+        let filtered = data.scenarios;
+        if (filter !== 'all') {
+            filtered = filtered.filter(s => s.tags.includes(filter));
+        }
+        renderScenarios(filtered);
+    });
+    
+    // Statistics toggle
+    document.getElementById('stats-toggle').addEventListener('click', async (e) => {
+        e.preventDefault();
+        const modal = document.getElementById('stats-modal');
+        modal.classList.add('active');
+        
+        try {
+            const response = await fetch('/api/statistics');
+            const data = await response.json();
+            
+            document.getElementById('stat-services').textContent = data.total_services;
+            document.getElementById('stat-dependencies').textContent = data.total_dependencies;
+            document.getElementById('stat-critical').textContent = data.most_critical.length;
+        } catch (error) {
+            console.error('Error loading statistics:', error);
+        }
+    });
+}
+
+function setupModals() {
+    // Modal close buttons
+    document.querySelectorAll('.modal-close').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.target.closest('.modal').classList.remove('active');
+        });
+    });
+    
+    document.getElementById('modal-close-btn').addEventListener('click', () => {
+        document.getElementById('scenario-modal').classList.remove('active');
+    });
+    
+    document.getElementById('results-close-btn').addEventListener('click', () => {
+        document.getElementById('results-modal').classList.remove('active');
+    });
+    
+    // Close modals when clicking outside
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+    });
+}
+
+async function openScenarioModal(scenarioName) {
+    try {
+        const response = await fetch(`/api/scenarios/${scenarioName}`);
+        const data = await response.json();
+        
+        if (!data.success) {
+            showToast('Error loading scenario', 'error');
+            return;
+        }
+        
+        const modal = document.getElementById('scenario-modal');
+        document.getElementById('modal-title').textContent = data.name;
+        
+        const peakBadge = document.getElementById('modal-peak-badge');
+        if (data.peak_hours) {
+            peakBadge.classList.remove('hidden');
+        } else {
+            peakBadge.classList.add('hidden');
+        }
+        
+        const content = `
+            <div class="scenario-details">
+                <div class="detail-section">
+                    <h3>Description</h3>
+                    <p>${escapeHtml(data.description)}</p>
+                </div>
+                
+                <div class="detail-section">
+                    <h3>Failed Services</h3>
+                    <ul class="services-list">
+                        ${data.failed_services.map(s => `<li>${escapeHtml(s)}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                ${data.tags.length > 0 ? `
+                    <div class="detail-section">
+                        <h3>Tags</h3>
+                        <div class="tags-list">
+                            ${data.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+                
+                <div class="detail-section">
+                    <h3>Metadata</h3>
+                    <ul class="metadata-list">
+                        <li><strong>Created:</strong> ${new Date(data.created_at).toLocaleString()}</li>
+                        <li><strong>Peak Hours:</strong> ${data.peak_hours ? '🔴 Yes (1.2x multiplier)' : 'No'}</li>
+                    </ul>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('modal-body').innerHTML = content;
+        document.getElementById('modal-run-btn').onclick = () => runSimulation(scenarioName);
+        
+        modal.classList.add('active');
+    } catch (error) {
+        console.error('Error opening scenario modal:', error);
+        showToast('Error loading scenario details', 'error');
+    }
+}
+
+async function runSimulation(scenarioName) {
+    const modal = document.getElementById('scenario-modal');
+    const btn = document.getElementById('modal-run-btn');
+    
+    btn.disabled = true;
+    btn.textContent = '⏳ Running...';
+    showSpinner(true);
+    
+    try {
+        const response = await fetch('/api/simulate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ scenario_name: scenarioName })
+        });
+        
+        const data = await response.json();
+        
+        if (!data.success) {
+            showToast('Error running simulation: ' + data.error, 'error');
+            return;
+        }
+        
+        modal.classList.remove('active');
+        displaySimulationResults(data);
+    } catch (error) {
+        console.error('Error running simulation:', error);
+        showToast('Error running simulation', 'error');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Run Simulation';
+        showSpinner(false);
+    }
+}
+
+function displaySimulationResults(data) {
+    const resultsModal = document.getElementById('results-modal');
+    const summary = data.summary;
+    const impacts = data.impacts;
+    const topProcesses = data.top_processes;
+    
+    const impactColor = summary.total_impact_score > 1000 ? 'danger' : 
+                       summary.total_impact_score > 500 ? 'warning' : 'success';
+    
+    const resultsHTML = `
+        <div class="results-container">
+            <div class="summary-cards">
+                <div class="summary-card impact-${impactColor}">
+                    <div class="summary-value">${summary.total_impact_score.toFixed(2)}</div>
+                    <div class="summary-label">Total Impact Score</div>
+                    ${summary.peak_hours_applied ? '<div class="summary-note">⚠️ 1.2x Peak Hours</div>' : ''}
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value">${summary.total_services_affected}</div>
+                    <div class="summary-label">Services Affected</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value">${summary.cascade_failures}</div>
+                    <div class="summary-label">Cascade Failures</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value">${summary.business_processes_affected}</div>
+                    <div class="summary-label">Processes Affected</div>
+                </div>
+            </div>
+            
+            <div class="results-section">
+                <h3>🎯 Top Impacted Business Processes</h3>
+                <div class="process-list">
+                    ${topProcesses.map((p, i) => `
+                        <div class="process-item">
+                            <div class="process-rank">${i + 1}</div>
+                            <div class="process-info">
+                                <strong>${escapeHtml(p.name)}</strong>
+                                <span class="impact-score">${p.impact_score.toFixed(2)}</span>
+                            </div>
+                            <div class="impact-bar">
+                                <div class="impact-fill" style="width: ${(p.impact_score / topProcesses[0].impact_score * 100)}%"></div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            
+            <div class="results-section">
+                <h3>📋 Detailed Impact Analysis</h3>
+                <div class="impacts-table">
+                    <div class="table-header">
+                        <div class="col-service">Service</div>
+                        <div class="col-type">Type</div>
+                        <div class="col-process">Business Process</div>
+                        <div class="col-impact">Impact Score</div>
+                        <div class="col-downtime">Downtime (min)</div>
+                    </div>
+                    ${impacts.slice(0, 10).map(impact => `
+                        <div class="table-row">
+                            <div class="col-service"><strong>${escapeHtml(impact.service)}</strong></div>
+                            <div class="col-type"><span class="badge">${impact.failure_type}</span></div>
+                            <div class="col-process">${escapeHtml(impact.business_process)}</div>
+                            <div class="col-impact impact-${impactColor}">${impact.impact_score.toFixed(2)}</div>
+                            <div class="col-downtime">${impact.estimated_downtime}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('results-content').innerHTML = resultsHTML;
+    document.getElementById('export-results-btn').onclick = () => exportResults(data);
+    resultsModal.classList.add('active');
+}
+
+function exportResults(data) {
+    const csv = [
+        ['Service', 'Type', 'Business Process', 'Impact Score', 'Downtime (min)'],
+        ...data.impacts.map(i => [
+            i.service,
+            i.failure_type,
+            i.business_process,
+            i.impact_score.toFixed(2),
+            i.estimated_downtime
+        ])
+    ].map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
+    
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${data.scenario_name}-results-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+</script>
+{% endblock %}

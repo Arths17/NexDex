@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}NexDex Dashboard{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <a href="/" class="logo">
+                    <span class="logo-icon">⚡</span>
+                    <span class="logo-text">NexDex</span>
+                </a>
+                <span class="tagline">Business Impact Simulator</span>
+            </div>
+            <nav class="navbar-menu">
+                <a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}">Dashboard</a>
+                <a href="/compare" class="nav-link {% if request.path == '/compare' %}active{% endif %}">Compare</a>
+                <a href="#" class="nav-link" id="stats-toggle">Statistics</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Statistics Modal (Hidden by default) -->
+    <div id="stats-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2>System Statistics</h2>
+            <div id="stats-content" class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-services">--</div>
+                    <div class="stat-label">Total Services</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-dependencies">--</div>
+                    <div class="stat-label">Dependencies</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-critical">--</div>
+                    <div class="stat-label">Critical Services</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="spinner hidden">
+        <div class="spinner-inner"></div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

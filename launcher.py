@@ -46,7 +46,8 @@ def launch_browser(port=5000, retries=10):
 def main():
     """Main entry point"""
     # Get port from environment or use default
-    port = int(os.environ.get('NEXDEX_PORT', 5000))
+    # Using 5555 instead of 5000 to avoid conflict with macOS Control Center
+    port = int(os.environ.get('NEXDEX_PORT', 5555))
     
     # Create Flask app
     app = create_app()

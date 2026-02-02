@@ -368,6 +368,19 @@ if __name__ == '__main__':
         print("Failed to initialize NexDex services")
         sys.exit(1)
     
+def create_app():
+    """Create and configure Flask app (for use with launcher)"""
+    global dependency_manager, simulation_engine, report_generator
+    
+    # Initialize services
+    if not initialize_services():
+        raise RuntimeError("Failed to initialize services")
+    
+    return app
+
+
+if __name__ == '__main__':
+    
     # Run Flask app
     print("=" * 60)
     print("🚀 NexDex Dashboard Starting...")
@@ -376,6 +389,7 @@ if __name__ == '__main__':
     print("🔧 Configuration: config/services.json")
     print("=" * 60)
     
+    create_app()
     app.run(
         host='0.0.0.0',
         port=5000,

@@ -1,0 +1,281 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - NexDex{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="hero">
+        <h1>⚙️ Settings</h1>
+        <p>Configure NexDex application preferences</p>
+    </div>
+
+    <div class="settings-container">
+        <!-- Edition Info -->
+        <div class="settings-section">
+            <h2>📦 Edition Information</h2>
+            <div class="info-card">
+                <div class="info-row">
+                    <span class="info-label">Version:</span>
+                    <span class="info-value">1.0.0</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Edition:</span>
+                    <span class="info-value" id="edition-type">Community</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">License:</span>
+                    <span class="info-value" id="license-status">Active</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Application Settings -->
+        <div class="settings-section">
+            <h2>🎨 Appearance</h2>
+            <div class="setting-item">
+                <label for="theme-select">Theme</label>
+                <select id="theme-select" class="form-control">
+                    <option value="light">Light</option>
+                    <option value="dark">Dark (Enterprise)</option>
+                    <option value="auto" disabled>Auto (Enterprise)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Simulation Settings -->
+        <div class="settings-section">
+            <h2>⚡ Simulation</h2>
+            <div class="setting-item">
+                <label>
+                    <input type="checkbox" id="auto-peak-hours" checked>
+                    Automatically detect peak hours
+                </label>
+            </div>
+            <div class="setting-item">
+                <label for="peak-multiplier">Peak Hours Multiplier</label>
+                <input type="number" id="peak-multiplier" value="1.2" min="1.0" max="3.0" step="0.1" class="form-control">
+            </div>
+        </div>
+
+        <!-- Report Settings -->
+        <div class="settings-section">
+            <h2>📄 Reports</h2>
+            <div class="setting-item">
+                <label>
+                    <input type="checkbox" id="auto-generate-reports" checked>
+                    Auto-generate reports after simulation
+                </label>
+            </div>
+            <div class="setting-item">
+                <label>Export Formats</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="export-html" checked> HTML</label>
+                    <label><input type="checkbox" id="export-pdf" disabled> PDF (Enterprise)</label>
+                    <label><input type="checkbox" id="export-json" checked> JSON</label>
+                    <label><input type="checkbox" id="export-csv" checked> CSV</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enterprise Features (Locked) -->
+        <div class="settings-section locked">
+            <h2>🔒 Enterprise Features</h2>
+            <p class="upgrade-prompt">Upgrade to Enterprise for advanced features</p>
+            <ul class="feature-list">
+                <li>✨ Advanced Analytics Dashboard</li>
+                <li>📊 Custom Report Templates</li>
+                <li>🔄 Scheduled Simulations</li>
+                <li>👥 Team Collaboration</li>
+                <li>📧 Email Notifications</li>
+                <li>🎨 Dark Mode</li>
+            </ul>
+            <button class="btn btn-primary" onclick="showUpgradeModal()">Learn More</button>
+        </div>
+
+        <!-- Save Button -->
+        <div class="settings-actions">
+            <button class="btn btn-secondary" onclick="resetSettings()">Reset to Defaults</button>
+            <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+        </div>
+    </div>
+</div>
+
+<!-- Upgrade Modal -->
+<div id="upgrade-modal" class="modal">
+    <div class="modal-content">
+        <span class="modal-close">&times;</span>
+        <div class="modal-header">
+            <h2>🚀 Upgrade to Enterprise</h2>
+        </div>
+        <div class="modal-body">
+            <p>Contact us for Enterprise licensing options.</p>
+            <a href="mailto:sales@nexdex.io" class="btn btn-primary">Contact Sales</a>
+        </div>
+    </div>
+</div>
+
+<style>
+.settings-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.settings-section {
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.settings-section.locked {
+    opacity: 0.8;
+    border: 2px dashed #ccc;
+}
+
+.info-card {
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 1.5rem;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #666;
+}
+
+.info-value {
+    color: #333;
+}
+
+.setting-item {
+    margin-bottom: 1.5rem;
+}
+
+.setting-item label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.checkbox-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.checkbox-group label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: normal;
+}
+
+.upgrade-prompt {
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.feature-list li {
+    padding: 0.5rem 0;
+    color: #666;
+}
+
+.settings-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+</style>
+
+<script>
+function saveSettings() {
+    const settings = {
+        theme: document.getElementById('theme-select').value,
+        auto_peak_hours: document.getElementById('auto-peak-hours').checked,
+        peak_multiplier: parseFloat(document.getElementById('peak-multiplier').value),
+        auto_generate_reports: document.getElementById('auto-generate-reports').checked,
+        export_formats: {
+            html: document.getElementById('export-html').checked,
+            json: document.getElementById('export-json').checked,
+            csv: document.getElementById('export-csv').checked
+        }
+    };
+    
+    localStorage.setItem('nexdex_settings', JSON.stringify(settings));
+    showToast('Settings saved successfully', 'success');
+}
+
+function resetSettings() {
+    if (confirm('Reset all settings to defaults?')) {
+        localStorage.removeItem('nexdex_settings');
+        location.reload();
+    }
+}
+
+function loadSettings() {
+    const saved = localStorage.getItem('nexdex_settings');
+    if (saved) {
+        const settings = JSON.parse(saved);
+        document.getElementById('theme-select').value = settings.theme || 'light';
+        document.getElementById('auto-peak-hours').checked = settings.auto_peak_hours !== false;
+        document.getElementById('peak-multiplier').value = settings.peak_multiplier || 1.2;
+        document.getElementById('auto-generate-reports').checked = settings.auto_generate_reports !== false;
+        if (settings.export_formats) {
+            document.getElementById('export-html').checked = settings.export_formats.html !== false;
+            document.getElementById('export-json').checked = settings.export_formats.json !== false;
+            document.getElementById('export-csv').checked = settings.export_formats.csv !== false;
+        }
+    }
+}
+
+function showUpgradeModal() {
+    document.getElementById('upgrade-modal').classList.add('active');
+}
+
+document.addEventListener('DOMContentLoaded', loadSettings);
+
+// Modal handlers
+document.querySelectorAll('.modal-close').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.target.closest('.modal').classList.remove('active');
+    });
+});
+
+function showToast(message, type) {
+    // Simple toast notification
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+    toast.style.cssText = 'position: fixed; top: 20px; right: 20px; padding: 1rem 2rem; background: #28a745; color: white; border-radius: 4px; z-index: 10000;';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+</script>
+{% endblock %}

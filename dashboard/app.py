@@ -20,6 +20,7 @@ from src.dependency_manager import DependencyManager
 from src.simulation_engine import SimulationEngine
 from src.report_generator import ReportGenerator
 from src.models import Scenario
+from src.license import get_license
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -297,6 +298,34 @@ def comparison():
         return render_template('comparison.html', scenarios=scenarios)
     except Exception as e:
         return render_template('error.html', error=str(e)), 500
+
+
+@app.route('/settings')
+def settings():
+    """Settings page"""
+    try:
+        license_info = get_license()
+        return render_template('settings.html', 
+                             edition=license_info.get_edition(),
+                             is_enterprise=license_info.is_enterprise(),
+                             features=license_info.get_enabled_features())
+    except Exception as e:
+        return render_template('error.html', error=str(e)), 500
+
+
+@app.route('/api/license')
+def api_license():
+    """API endpoint to get license information"""
+    try:
+        license_info = get_license()
+        return jsonify({
+            'success': True,
+            'edition': license_info.get_edition(),
+            'is_enterprise': license_info.is_enterprise(),
+            'features': license_info.get_enabled_features()
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 
 @app.route('/api/services')

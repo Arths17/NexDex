@@ -605,7 +605,7 @@
                     <p class="system-info">Intel & Apple Silicon</p>
                     <p class="system-info">macOS 10.13 or later</p>
                     <p class="size">~28 MB</p>
-                    <a href="https://raw.githubusercontent.com/Arths17/NexDex/main/releases/NexDex-Mac.zip" class="download-btn">Download for macOS</a>
+                    <a href="https://github.com/Arths17/NexDex/raw/main/releases/NexDex-Mac.zip" class="download-btn">Download for macOS</a>
                     <div class="instructions">
                         <strong>Installation Steps:</strong>
                         <ol>
@@ -846,11 +846,11 @@
         });
 
         // Update download link to work from any location
-        const macLink = document.querySelector('a[href="https://raw.githubusercontent.com/Arths17/NexDex/main/releases/NexDex-Mac.zip"]');
+        const macLink = document.querySelector('a[href="https://github.com/Arths17/NexDex/raw/main/releases/NexDex-Mac.zip"]');
         if (macLink) {
             macLink.onclick = function(e) {
                 // Download from GitHub raw content
-                window.location.href = 'https://raw.githubusercontent.com/Arths17/NexDex/main/releases/NexDex-Mac.zip';
+                window.location.href = 'https://github.com/Arths17/NexDex/raw/main/releases/NexDex-Mac.zip';
                 return false;
                 return false;
             };

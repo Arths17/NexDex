@@ -1,26 +1,43 @@
 # macOS Gatekeeper Warning
 
-If you see a warning that says "NexDex cannot be opened because the developer cannot be verified," follow these steps:
+If you see a warning that says "Apple could not verify NexDex is free of malware", follow these steps:
 
 ## Quick Fix (Recommended)
 
 ### Method 1: Right-Click Open
 1. Open **Finder**
 2. Navigate to where you downloaded **NexDex.app**
-3. **Right-click** on `NexDex.app`
-4. Click **"Open"**
+3. **Right-click** (or Control+click) on `NexDex.app`
+4. Click **"Open"** from the menu
 5. Click **"Open"** again in the security dialog
 
 The app will now open and won't show the warning again.
 
-### Method 2: Terminal Command
+### Method 2: Terminal Command (Fastest)
 Open Terminal and run:
 
 ```bash
-xattr -d com.apple.quarantine ~/Downloads/NexDex.app
+xattr -cr ~/Downloads/NexDex.app
+open ~/Downloads/NexDex.app
 ```
 
-Then double-click NexDex.app to open it normally.
+### Method 3: Use Our Script
+If you downloaded the full repository:
+
+```bash
+chmod +x remove_quarantine.sh
+./remove_quarantine.sh ~/Downloads/NexDex.app
+```
+
+## Alternative: System Preferences
+
+If the above don't work:
+
+1. Go to **System Preferences** → **Security & Privacy**
+2. Click the **General** tab
+3. Look for a message about NexDex being blocked
+4. Click **"Open Anyway"**
+5. Enter your password if prompted
 
 ## Why This Happens
 

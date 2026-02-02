@@ -62,9 +62,14 @@ if [ -d "dist/NexDex.app" ]; then
     echo "📦 Package location: dist/NexDex.app"
     echo ""
     
+    # Sign the app with ad-hoc signature
+    echo "🔐 Code signing app..."
+    codesign --force --deep --sign - dist/NexDex.app 2>/dev/null || echo "⚠️  Code signing skipped (optional)"
+    
     # Remove quarantine attribute for local testing
     echo "🔓 Removing quarantine attribute for local testing..."
     xattr -d com.apple.quarantine dist/NexDex.app 2>/dev/null || true
+    xattr -cr dist/NexDex.app 2>/dev/null || true
     
     echo ""
     echo "📋 Next steps:"
@@ -78,13 +83,17 @@ if [ -d "dist/NexDex.app" ]; then
     # Create a zip for distribution
     echo "📦 Creating distribution zip..."
     cd dist
+    
+    # Sign before zipping
+    codesign --force --deep --sign - NexDex.app 2>/dev/null || true
+    
     zip -r -q ../releases/NexDex-Mac.zip NexDex.app
     cd ..
     
     echo "✅ Distribution zip created: releases/NexDex-Mac.zip"
     echo ""
-    echo "📝 Note: For production distribution, you may want to code sign the app:"
-    echo "   codesign -s - --deep --force dist/NexDex.app"
+    echo "📝 Note: Users will need to right-click → Open on first launch"
+    echo "   See MACOS-GATEKEEPER.md for detailed instructions"
     echo ""
 else
     echo "❌ Build failed. Check the error messages above."

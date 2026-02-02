@@ -61,6 +61,12 @@ if [ -d "dist/NexDex.app" ]; then
     echo ""
     echo "📦 Package location: dist/NexDex.app"
     echo ""
+    
+    # Remove quarantine attribute for local testing
+    echo "🔓 Removing quarantine attribute for local testing..."
+    xattr -d com.apple.quarantine dist/NexDex.app 2>/dev/null || true
+    
+    echo ""
     echo "📋 Next steps:"
     echo "   1. Open Finder and navigate to dist/"
     echo "   2. Right-click NexDex.app → Open (to allow on first run)"
@@ -76,6 +82,9 @@ if [ -d "dist/NexDex.app" ]; then
     cd ..
     
     echo "✅ Distribution zip created: releases/NexDex-Mac.zip"
+    echo ""
+    echo "📝 Note: For production distribution, you may want to code sign the app:"
+    echo "   codesign -s - --deep --force dist/NexDex.app"
     echo ""
 else
     echo "❌ Build failed. Check the error messages above."

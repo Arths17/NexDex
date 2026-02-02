@@ -605,7 +605,7 @@
                     <p class="system-info">Intel & Apple Silicon</p>
                     <p class="system-info">macOS 10.13 or later</p>
                     <p class="size">~28 MB</p>
-                    <a href="https://cdn.jsdelivr.net/gh/Arths17/NexDex@main/releases/NexDex-Mac.zip" download="NexDex-Mac.zip" class="download-btn">Download for macOS</a>
+                    <a href="https://github.com/Arths17/NexDex/raw/main/releases/NexDex-Mac.zip" download class="download-btn">Download for macOS</a>
                     <div class="instructions">
                         <strong>Installation Steps:</strong>
                         <ol>
@@ -845,13 +845,29 @@
             });
         });
 
-        // Update download link to work from any location
-        const macLink = document.querySelector('a[href="https://cdn.jsdelivr.net/gh/Arths17/NexDex@main/releases/NexDex-Mac.zip"]');
-        if (macLink) {
-            macLink.onclick = function(e) {
-                // Download from jsDelivr CDN
-                window.location.href = 'https://cdn.jsdelivr.net/gh/Arths17/NexDex@main/releases/NexDex-Mac.zip';
-                return false;
+        // Download link handler
+        const downloadLink = document.querySelector('a[href="https://github.com/Arths17/NexDex/raw/main/releases/NexDex-Mac.zip"]');
+        if (downloadLink) {
+            downloadLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Force download with proper header
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', 'https://github.com/Arths17/NexDex/raw/main/releases/NexDex-Mac.zip', true);
+                xhr.responseType = 'blob';
+                xhr.onload = function() {
+                    const blob = new Blob([xhr.response], {type: 'application/zip'});
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'NexDex-Mac.zip';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                };
+                xhr.send();
+            });
+        }
                 return false;
             };
         }
